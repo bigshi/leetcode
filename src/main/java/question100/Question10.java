@@ -1,9 +1,11 @@
 package question100;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,7 +20,8 @@ public class Question10 {
     public static void main(String[] args) {
         Question10 q = new Question10();
 //        System.out.println(Arrays.toString(q.twoSum(new int[]{3, 3}, 6)));
-        System.out.println(q.addTwoNumbers(q.getListNode(9), q.getListNode(9999999991L)));
+//        System.out.println(q.addTwoNumbers(q.getListNode(9), q.getListNode(9999999991L)));
+        System.out.println(q.lengthOfLongestSubstring("aabaab!bb"));
     }
 
 
@@ -140,6 +143,62 @@ public class Question10 {
             this.val = val;
             this.next = next;
         }
+    }
+
+
+    /**
+     * 给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度。
+     *
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/longest-substring-without-repeating-characters
+     * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+     */
+    public int lengthOfLongestSubstring(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        if (s.length() == 1) {
+            return 1;
+        }
+        // 转成数组
+        char[] chars = s.toCharArray();
+        int max = 1;
+        List<Character> children = new ArrayList<>();
+        int i = 0, j = 0;
+        while (j < chars.length) {
+            if (i == j) {
+                children.add(chars[i]);
+                j++;
+                continue;
+            }
+            // 判断子串是否包含当前字符
+            int x = children.indexOf(chars[j]);
+            if (x == -1) {
+                children.add(chars[j]);
+                j++;
+                continue;
+            }
+            // 包含当前元素
+            if (max < children.size()) {
+                max = children.size();
+            }
+            int y = x + 1;
+            // i 移动到原数组下一个位置
+            i = i + y;
+            // j 移动到i的下个位置 或者不动
+            j = i >= j ? (i + 1) : j;
+            // 子串保留之后的内容
+            if (y==children.size()){
+                children.clear();
+                children.add(chars[i]);
+            }else {
+                children = children.subList(y, children.size());
+            }
+        }
+        if (max < children.size()) {
+            max = children.size();
+        }
+        return max;
     }
 
 
