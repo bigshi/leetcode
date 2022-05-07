@@ -21,7 +21,8 @@ public class Question10 {
         Question10 q = new Question10();
 //        System.out.println(Arrays.toString(q.twoSum(new int[]{3, 3}, 6)));
 //        System.out.println(q.addTwoNumbers(q.getListNode(9), q.getListNode(9999999991L)));
-        System.out.println(q.lengthOfLongestSubstring("aabaab!bb"));
+//        System.out.println(q.lengthOfLongestSubstring("aabaab!bb"));
+        System.out.println(q.findMedianSortedArrays(new int[]{1,3},new int[]{2}));
     }
 
 
@@ -188,10 +189,10 @@ public class Question10 {
             // j 移动到i的下个位置 或者不动
             j = i >= j ? (i + 1) : j;
             // 子串保留之后的内容
-            if (y==children.size()){
+            if (y == children.size()) {
                 children.clear();
                 children.add(chars[i]);
-            }else {
+            } else {
                 children = children.subList(y, children.size());
             }
         }
@@ -202,4 +203,87 @@ public class Question10 {
     }
 
 
+    /**
+     * 给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。
+     *
+     * 算法的时间复杂度应该为 O(log (m+n)) 。
+     *
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/median-of-two-sorted-arrays
+     * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+     *
+     * @param nums1
+     * @param nums2
+     * @return
+     */
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int m = nums1 == null ? 0 : nums1.length;
+        int n = nums2 == null ? 0 : nums2.length;
+        double d1 = 1.00000F;
+        double d2 = 2.00000F;
+
+        if (m == 0 && n == 0) {
+            return 0F;
+        }
+        int[] nums3 = null;
+        int x = 0;
+        if (m == 0 || n == 0) {
+            if (m == 0) {
+                x = n;
+                nums3 = nums2;
+            } else {
+                x = m;
+                nums3 = nums1;
+            }
+        }
+        // 有一个为空
+        if (x != 0) {
+            if (x % 2 == 0) {
+                return (nums3[x / 2] + nums3[(x / 2) - 1]) / d2;
+            }
+            return nums3[x / 2] * d1;
+        }
+        // 都不为空
+        x = m + n;
+        // 串连的
+        if (nums1[m - 1] <= nums2[0]) {
+            nums3 = new int[x];
+            System.arraycopy(nums1, 0, nums3, 0, m);
+            System.arraycopy(nums2, 0, nums3, m, n);
+        }
+        if (nums2[n - 1] <= nums1[0]) {
+            nums3 = new int[x];
+            System.arraycopy(nums2, 0, nums3, 0, n);
+            System.arraycopy(nums1, 0, nums3, n, m);
+        }
+        if (nums3 != null) {
+            if (x % 2 == 0) {
+                return (nums3[x / 2] + nums3[(x / 2) - 1]) / d2;
+            }
+            return nums3[x / 2] * d1;
+        }
+        // 非串连
+        nums3 = new int[x];
+        int i = 0, j = 0, k = 0;
+        while (i < nums1.length && j < nums2.length) {
+            if (nums1[i] <= nums2[j]) {
+                nums3[k] = nums1[i];
+                i++;
+            } else {
+                nums3[k] = nums2[j];
+                j++;
+            }
+            k++;
+        }
+        if (i < nums1.length) {
+            System.arraycopy(nums1, i, nums3, k, m - i);
+        }
+        if (j < nums2.length) {
+            System.arraycopy(nums2, j, nums3, k, n - j);
+        }
+        if (x % 2 == 0) {
+            return (nums3[x / 2] + nums3[(x / 2) - 1]) / d2;
+        }
+        return nums3[x / 2] * d1;
+    }
 }
