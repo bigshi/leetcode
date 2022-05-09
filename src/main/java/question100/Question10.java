@@ -22,7 +22,8 @@ public class Question10 {
 //        System.out.println(Arrays.toString(q.twoSum(new int[]{3, 3}, 6)));
 //        System.out.println(q.addTwoNumbers(q.getListNode(9), q.getListNode(9999999991L)));
 //        System.out.println(q.lengthOfLongestSubstring("aabaab!bb"));
-        System.out.println(q.findMedianSortedArrays(new int[]{1,3},new int[]{2}));
+//        System.out.println(q.findMedianSortedArrays(new int[]{1, 3}, new int[]{2}));
+        System.out.println(q.longestPalindrome("1111"));
     }
 
 
@@ -286,4 +287,50 @@ public class Question10 {
         }
         return nums3[x / 2] * d1;
     }
+
+    /**
+     * 给你一个字符串 s，找到 s 中最长的回文子串。
+     *
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/longest-palindromic-substring/
+     * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+     *
+     * @param s
+     * @return
+     */
+    public String longestPalindrome(String s) {
+        if (s == null || s.length() == 0) {
+            return "";
+        }
+        // 单个字符
+        if (s.length() == 1) {
+            return s;
+        }
+        char[] chars = s.toCharArray();
+        // 两个字符
+        if (chars.length == 2) {
+            return chars[0] == chars[1] ? s : String.valueOf(chars[0]);
+        }
+        int index = 0, last = 0, max = 0;
+        for (int i = 0; i < chars.length; i++) {
+            for (int j = chars.length - 1; j >= i; j--) {
+                int m = i;
+                int n = j;
+                while (m < n && chars[m] == chars[n]) {
+                    m++;
+                    n--;
+                }
+                if (m >= n) {
+                    if (max < j - i) {
+                        max = j - i;
+                        index = i;
+                        last = j;
+                    }
+                    break;
+                }
+            }
+        }
+        return s.substring(index, last + 1);
+    }
+
 }
