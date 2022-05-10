@@ -1,15 +1,11 @@
 package question100;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import com.sun.xml.internal.ws.util.StringUtils;
 
 /**
  * @author Lu Chao
@@ -23,7 +19,9 @@ public class Question10 {
 //        System.out.println(q.addTwoNumbers(q.getListNode(9), q.getListNode(9999999991L)));
 //        System.out.println(q.lengthOfLongestSubstring("aabaab!bb"));
 //        System.out.println(q.findMedianSortedArrays(new int[]{1, 3}, new int[]{2}));
-        System.out.println(q.longestPalindrome("1111"));
+//        System.out.println(q.longestPalindrome("0123456789"));
+        System.out.println(q.convert("0123456789", 3));
+
     }
 
 
@@ -333,4 +331,70 @@ public class Question10 {
         return s.substring(index, last + 1);
     }
 
+    /**
+     * 将一个给定字符串 s 根据给定的行数 numRows ，以从上往下、从左到右进行 Z 字形排列。
+     *
+     * 比如输入字符串为 "PAYPALISHIRING" 行数为 3 时，排列如下：
+     *
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode.cn/problems/zigzag-conversion
+     * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+     *
+     * @param s
+     * @param numRows
+     * @return
+     */
+    public String convert(String s, int numRows) {
+        if (numRows == 1) {
+            return s;
+        }
+        List<List<String>> cols = new ArrayList<>();
+        char[] chars = s.toCharArray();
+        int i = 0, j = 0;
+        List<String> col = new ArrayList<>(numRows);
+        // 将每个元素一个个放进去 我们先考虑横过来放
+        while (i < chars.length) {
+            // 如果是小于行数的，直接放
+            if (j < numRows) {
+                col.add(String.valueOf(chars[i]));
+                i++;
+                j++;
+                continue;
+            }
+            // 一行放满，考虑非满行的 放法
+            if (j < 2 * (numRows - 1)) {
+                cols.add(col);
+                col = new ArrayList<>(numRows);
+                for (int k = 0; k < 2 * (numRows - 1) - j; k++) {
+                    col.add("");
+                }
+                col.add(String.valueOf(chars[i]));
+                for (int k = 2 * (numRows - 1) - j + 1; k < numRows; k++) {
+                    col.add("");
+                }
+                i++;
+                j++;
+                continue;
+            }
+            cols.add(col);
+            col = new ArrayList<>(numRows);
+            j = 0;
+        }
+
+        for (int k = 0; k < numRows - j; k++) {
+            col.add("");
+        }
+        cols.add(col);
+
+        StringBuilder content = new StringBuilder();
+        for (int m = 0; m < numRows; m++) {
+            for (List<String> strings : cols) {
+                if ("".equals(strings.get(m))) {
+                    continue;
+                }
+                content.append(strings.get(m));
+            }
+        }
+        return content.toString();
+    }
 }
