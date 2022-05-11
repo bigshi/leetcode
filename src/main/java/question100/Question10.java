@@ -20,7 +20,9 @@ public class Question10 {
 //        System.out.println(q.lengthOfLongestSubstring("aabaab!bb"));
 //        System.out.println(q.findMedianSortedArrays(new int[]{1, 3}, new int[]{2}));
 //        System.out.println(q.longestPalindrome("0123456789"));
-        System.out.println(q.convert("0123456789", 3));
+//        System.out.println(q.convert("0123456789", 3));
+        System.out.println(q.reverse(901000));
+
 
     }
 
@@ -396,5 +398,59 @@ public class Question10 {
             }
         }
         return content.toString();
+    }
+
+
+    /**
+     * 给你一个 32 位的有符号整数 x ，返回将 x 中的数字部分反转后的结果。
+     *
+     * 如果反转后整数超过 32 位的有符号整数的范围 [−231,  231 − 1] ，就返回 0。
+     *
+     * 假设环境不允许存储 64 位整数（有符号或无符号）。
+     *
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode.cn/problems/reverse-integer
+     * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+     *
+     * @param x
+     * @return
+     */
+    public int reverse(int x) {
+        char[] chars = String.valueOf(x).toCharArray();
+        char[] newChars = new char[chars.length];
+        int j = 0, k;
+        boolean flag;
+        if (chars[0] == '-') {
+            newChars[0] = chars[0];
+            k = 1;
+            j++;
+            flag = true;
+        } else {
+            k = 0;
+            flag = false;
+        }
+        for (int i = chars.length - 1; i >= k; i--) {
+            if (chars[i] == '0' && j < k + 1) {
+                continue;
+            }
+            newChars[j] = chars[i];
+            j++;
+        }
+        while (j < chars.length) {
+            newChars[j] = ' ';
+            j++;
+        }
+
+        String newNum = String.valueOf(newChars).trim();
+        if ("".equals(newNum)) {
+            return 0;
+        }
+        String max = String.valueOf(Integer.MAX_VALUE);
+        String min = String.valueOf(Integer.MIN_VALUE);
+        if (flag) {
+            return min.length() > newNum.length() || min.compareTo(newNum) > 0 ? Integer.valueOf(newNum) : 0;
+        }
+        return max.length() > newNum.length() || max.compareTo(newNum) > 0 ? Integer.valueOf(newNum) : 0;
+
     }
 }
