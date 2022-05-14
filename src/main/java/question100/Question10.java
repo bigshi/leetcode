@@ -22,8 +22,8 @@ public class Question10 {
 //        System.out.println(q.longestPalindrome("0123456789"));
 //        System.out.println(q.convert("0123456789", 3));
 //        System.out.println(q.reverse(901000));
-        System.out.println(q.myAtoi("4193 with words"));
-
+//        System.out.println(q.myAtoi("4193 with words"));
+        System.out.println(q.isPalindrome(112211));
     }
 
 
@@ -510,11 +510,54 @@ public class Question10 {
             if (ans > (Integer.MAX_VALUE - digit) / 10) {
                 // 本来应该是 ans * 10 + digit > Integer.MAX_VALUE
                 // 但是 *10 和 + digit 都有可能越界，所有都移动到右边去就可以了。
-                return negative? Integer.MIN_VALUE : Integer.MAX_VALUE;
+                return negative ? Integer.MIN_VALUE : Integer.MAX_VALUE;
             }
             ans = ans * 10 + digit;
             idx++;
         }
-        return negative? -ans : ans;
+        return negative ? -ans : ans;
+    }
+
+
+    /**
+     * 给你一个整数 x ，如果 x 是一个回文整数，返回 true ；否则，返回 false 。
+     *
+     * 回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。
+     *
+     * 例如，121 是回文，而 123 不是。
+     *
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode.cn/problems/palindrome-number
+     * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+     *
+     * @param x
+     * @return
+     */
+    public boolean isPalindrome(int x) {
+        if (x < 0) {
+            return false;
+        }
+
+        int y = 10;
+        if (x < y) {
+            return true;
+        }
+        if (x % y == 0) {
+            return false;
+        }
+        List<Integer> list = new ArrayList<>();
+        int m = x % y;
+        list.add(m);
+        int n = x / y;
+        while (n > 0) {
+            list.add(n % y);
+            n = n / y;
+        }
+        m = 0;
+        for (int i = list.size() - 1; i >= 0; i--) {
+            m = m + (list.get(i) * ((Double) Math.pow(y, list.size() - 1 - i)).intValue());
+        }
+        return m == x;
+
     }
 }
